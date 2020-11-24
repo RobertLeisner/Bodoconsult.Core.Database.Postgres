@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Collections.Generic;
 using System.Data.Common;
 using Bodoconsult.Core.Database.Postgres.Test.Helpers;
 using Npgsql;
@@ -9,6 +7,15 @@ using NUnit.Framework;
 
 namespace Bodoconsult.Core.Database.Postgres.Test
 {
+
+    /// <summary>
+    /// Install postgres version of Chinook database before testing.
+    /// See https://github.com/lerocha/chinook-database/tree/master/ChinookDatabase/DataSources for details.
+    ///
+    /// Pay attention field names and table names are normally lower case words in PostgreSQL.
+    /// If you want to use upper case or a mixture of upper and lower case, please set the names in
+    /// quotation marks.
+    /// </summary>
     [TestFixture]
     public class UnitTestPostgresConnManager
     {
@@ -28,9 +35,7 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestGetDataTableSql()
         {
             // Assert
-            var sql =
-                "SELECT * " +
-                "FROM Film; ";
+            var sql = "SELECT * FROM \"Customer\";";
 
             // Act
             var result = _db.GetDataTable(sql);
@@ -46,8 +51,7 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         {
             // Act
             var sql =
-                "SELECT * " +
-                "FROM Film; ";
+                "SELECT * FROM \"Customer\"; ";
 
             var cmd = new NpgsqlCommand(sql);
 
@@ -66,7 +70,7 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         [Test]
         public void TestGetDataTableFromCommandWithGetCommand()
         {
-            const string sql = "SELECT * FROM Film";
+            const string sql = "SELECT * FROM \"Customer\"";
 
             var cmd = _db.GetCommand();
             cmd.CommandText = sql;
@@ -86,7 +90,7 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestGetDataReaderFromSql()
         {
 
-            const string sql = "SELECT * FROM Film";
+            const string sql = "SELECT * FROM \"Customer\"";
 
             var erg = _db.GetDataReader(sql);
 
@@ -102,7 +106,7 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestGetDataReaderFromCommand()
         {
 
-            const string sql = "SELECT * FROM Film";
+            const string sql = "SELECT * FROM \"Customer\"";
 
 
             var cmd = new NpgsqlCommand
@@ -124,7 +128,7 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         [Test]
         public void TestGetDataReaderFromCommandWidthGetCommand()
         {
-            const string sql = "SELECT * FROM Film";
+            const string sql = "SELECT * FROM \"Customer\"";
 
             var cmd = _db.GetCommand();
             cmd.CommandText = sql;
@@ -143,7 +147,7 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         [Test]
         public void TestGetDataReaderFromCommandWidthGetCommandAndParameter()
         {
-            const string sql = "SELECT * FROM Film WHERE film_id=@ID;";
+            const string sql = "SELECT * FROM \"Customer\" WHERE \"CustomerId\"=@ID;";
 
             var cmd = _db.GetCommand();
             cmd.CommandText = sql;
@@ -166,7 +170,7 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestExecFromSql()
         {
 
-            const string sql = "DELETE FROM Film WHERE film_id=-99";
+            const string sql = "DELETE FROM \"Customer\" WHERE \"CustomerId\"=-99";
 
             Assert.DoesNotThrow(() => _db.Exec(sql));
         }
@@ -179,7 +183,7 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestExecFromCommand()
         {
 
-            const string sql = "DELETE FROM Film WHERE film_id=@Key";
+            const string sql = "DELETE FROM \"Customer\" WHERE \"CustomerId\"=@Key";
 
             // Create command
             var cmd = new NpgsqlCommand()
@@ -202,7 +206,7 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestExecWithResultFromSql()
         {
 
-            const string sql = "SELECT film_id FROM film WHERE film_id=8";
+            const string sql = "SELECT \"CustomerId\" FROM \"Customer\" WHERE \"CustomerId\"=8;";
 
             var result = _db.ExecWithResult(sql);
 
@@ -218,7 +222,7 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestExecWithResultFromCommand()
         {
 
-            const string sql = "SELECT film_id FROM Film WHERE film_id=@Key";
+            const string sql = "SELECT \"CustomerId\" FROM \"Customer\" WHERE \"CustomerId\"=@Key";
 
             // Create command
             var cmd = new NpgsqlCommand
@@ -240,7 +244,7 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         [Test]
         public void TestExecMultiple()
         {
-            const string sql = "DELETE FROM Film WHERE film_id=-99";
+            const string sql = "DELETE FROM \"Customer\" WHERE \"CustomerId\"=-99";
 
             var commands = new List<DbCommand>();
 

@@ -3,14 +3,17 @@
 Bodoconsult.Core.Database.Postgres library simplifies the access to Postgres based databases. 
 It handles the most common database actions like getting datatables, running SQL statement or fetch scalar values from the database.
 
+Additionally the library contains some tools for developers making the usage of the database layers derived from Bodoconsult.Core.Database as easy as possible. See below.
 
 # How to use the library
 
 The source code contain a NUnit test classes, the following source code is extracted from. The samples below show the most helpful use cases for the library.
 
-The database used for unit tests is the Postgres sample database from <https://www.postgresqltutorial.com/postgresql-sample-database/>.
+The database used for unit tests is the Chinook sample database from <https://github.com/lerocha/chinook-database>.
 
-## Connection string to Postgres
+## How to use the database layer
+
+### Connection string to Postgres
 
 To connect to a Postgres database with this library you need to provide connection string. Here a sample for such a connection string:
 
@@ -18,28 +21,28 @@ Host=192.168.10.125;Port=5432;Username=postgres;Password=mypassword;Database=dvd
 
 For more information on connection strings see <https://www.connectionstrings.com/postgresql/>.
 
-## Class overview and main methods
+### Class overview and main methods
 
 The most important class in the library is the the class PostgresConnManager. PostgresConnManager exposes the following main methods:
 
-### Connection related and general methods
+#### Connection related and general methods
 
 * TestConnection()
 * GetCommand()
 * GetParameter()
 
-### Methods for running SQL statements or commands
+#### Methods for running SQL statements or commands
 
 * Exec()
 * ExecMultiple()
 
-### Methods for getting data
+#### Methods for getting data
 
 * GetDataTable()
 * GetDataReader()
 * GetDataAdapter()
 
-## Samples
+### Samples
 
         [SetUp]
         public void Setup()
@@ -298,9 +301,45 @@ The most important class in the library is the the class PostgresConnManager. Po
             Assert.IsTrue(result == 0);
         }
 
+## Developer tools for making best usage of Bodoconsult.Core.Database.Postgres based data layers
+
+There is as basic metadata infrastructure implemented to help developers to make best usage of Bodoconsult.Core.Database. This metadata infrastructure derived from 
+IMetaDataService / BaseMetaDataService creates C# code files based on a certain SQL statement OR DBCommand object. 
+
+1. It first creates an adjusted entity class for the SQL statement OR DBCommand object.
+2. Then it creates a mapping method to map a DataReader row object to the entity class.
+3. At last it creates an service class for adding new rows, updating rows and getting rows from the database table related to SQL statement OR DBCommand object. 
+This feature works only well for statements absed on a single table. If there are more tables targeted in the statement, only the GetAll and GetById may make sense in the service class. 
+The other methods ma be removed in that case.
+
+Here a sample how to use the IMetaDataService infrastructure:
 
 
+			const string conn = "Valid ADO.NET provider connection string";
 
+            const string sql = "SELECT * FROM \"Customer\";";
+
+            const string entityName = "Customer";
+
+            const string primaryKeyField = "CustomerId";
+
+            const string targetPath = @"D:\temp";
+
+			// Instanciate the metadata service
+			var service = PostgresMetaDataService();
+
+			// Get the metadata for the SQL statement
+            service.GetMetaData(conn, entityName, sql, primaryKeyField);
+
+            // Export the code files
+            var result = service.ExportAll(targetPath);
+
+
+As a result you will find three files with code in the folder D:\temp:
+
+* D:\temp\Customer_EntityClass_Code.txt
+* D:\temp\Customer_DataHelperMethod_Code.txt
+* D:\temp\Customer_ServiceClass_Code.txt
 
 # About us
 

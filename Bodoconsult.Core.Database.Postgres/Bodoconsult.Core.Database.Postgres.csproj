@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -7,20 +7,39 @@
     <RepositoryUrl>https://github.com/RobertLeisner/Bodoconsult.Core.Database.Postgres</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageId>Bodoconsult.Core.Database.Postgres</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.4</Version>
     <Authors>Robert Leisner</Authors>
     <Company>Bodoconsult EDV-Dienstleistungen GmbH</Company>
     <RepositoryType>git</RepositoryType>
     <PackageTags>System.Data PostgreSql Datatable SQL exec</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>Simple .NET database layer for PostgreSQL based on System.Data intended for mainly read-only data access i.e. for reporting purposes</Description>
-    <PackageReleaseNotes>First draft</PackageReleaseNotes>
+    <PackageReleaseNotes>Added metadata infrastructure for creating entities, mappings and service classes.</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/RobertLeisner/Bodoconsult.Core.Database.Postgres</PackageProjectUrl>
 
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bodoconsult.Core.Database" Version="1.0.4" />
+    <Compile Remove="MetaData\Model\**" />
+    <EmbeddedResource Remove="MetaData\Model\**" />
+    <None Remove="MetaData\Model\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="MetaData\BaseMetaDataService.cs" />
+    <Compile Remove="MetaData\IMetaDataService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\rleisner\.nuget\packages\bodoconsult.core.database\1.0.5\contentFiles\any\netcoreapp3.1\LICENSE.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.md" Link="LICENSE.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bodoconsult.Core.Database" Version="1.0.6" />
     <PackageReference Include="Npgsql" Version="5.0.0" />
   </ItemGroup>
 

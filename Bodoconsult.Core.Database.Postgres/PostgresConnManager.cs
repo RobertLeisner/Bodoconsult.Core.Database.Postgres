@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using Npgsql;
 using NpgsqlTypes;
@@ -83,7 +82,7 @@ namespace Bodoconsult.Core.Database.Postgres
         {
             if (!(cmd is NpgsqlCommand))
             {
-                throw new ArgumentException("Command must by of type OleDbCommand!");
+                throw new ArgumentException("Command must be of type NpgsqlCommand!");
             }
 
             var conn = new NpgsqlConnection(ConnectionString);
