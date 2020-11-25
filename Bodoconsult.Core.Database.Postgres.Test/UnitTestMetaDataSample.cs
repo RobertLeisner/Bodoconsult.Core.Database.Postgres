@@ -66,19 +66,9 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         {
             const int id = 28;
 
-            string newName;
-
-            // Act
             var customer = _db.GetById(id);
 
-            if (customer.LastName=="Barnett")
-            {
-                newName = "Roberts";
-            }
-            else
-            {
-                newName = "Barnett";
-            }
+            var newName = customer.LastName=="Barnett" ? "Roberts" : "Barnett";
 
             customer.LastName = newName;
 
@@ -110,6 +100,19 @@ namespace Bodoconsult.Core.Database.Postgres.Test
 
             Assert.IsNotNull(result);
             Assert.AreEqual(customer.LastName, result.LastName);
+
+        }
+
+        [Test]
+        public void TestDelete()
+        {
+            // Assert
+            const int id = -99;
+            // Act
+            _db.Delete(id);
+
+            // Assert
+            Assert.IsTrue(true);
 
         }
     }

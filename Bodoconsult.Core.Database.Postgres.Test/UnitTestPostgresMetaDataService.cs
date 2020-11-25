@@ -23,6 +23,14 @@ namespace Bodoconsult.Core.Database.Postgres.Test
 
         private string _conn;
 
+        const string Sql = "SELECT * FROM \"Customer\";";
+
+        const string EntityName = "Customer";
+
+        const string PrimaryKeyField = "CustomerId";
+
+        const string TargetPath = @"D:\temp";
+
         [SetUp]
         public void Setup()
         {
@@ -35,21 +43,15 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestGetMetaData()
         {
             // Assert
-            const string sql = "SELECT * FROM \"Customer\";";
-
-            const string entityName = "Customer";
-
-            const string primaryKeyField = "CustomerId";
-
             Assert.IsNull(_service.Table);
 
             // Act
-            _service.GetMetaData(_conn, entityName, sql, primaryKeyField);
+            _service.GetMetaData(_conn, EntityName, Sql, PrimaryKeyField);
 
             // Assert
             Assert.IsNotNull(_service.Table);
 
-            Assert.AreEqual(entityName, _service.Table.Name);
+            Assert.AreEqual(EntityName, _service.Table.Name);
 
             Assert.IsTrue(_service.Table.Fields.Any());
         }
@@ -59,19 +61,15 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestGetMetaDataMoreTypes()
         {
             // Assert
-            const string sql = "SELECT * FROM \"Employee\";";
-
-            const string entityName = "Employee";
-
             Assert.IsNull(_service.Table);
 
             // Act
-            _service.GetMetaData(_conn, entityName, sql);
+            _service.GetMetaData(_conn, EntityName, Sql);
 
             // Assert
             Assert.IsNotNull(_service.Table);
 
-            Assert.AreEqual(entityName, _service.Table.Name);
+            Assert.AreEqual(EntityName, _service.Table.Name);
 
             Assert.IsTrue(_service.Table.Fields.Any());
         }
@@ -80,17 +78,13 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestCreateEntityClass()
         {
             // Assert
-            const string sql = "SELECT * FROM \"Customer\";";
-
-            const string entityName = "Customer";
-
             Assert.IsNull(_service.Table);
 
-            _service.GetMetaData(_conn, entityName, sql);
+            _service.GetMetaData(_conn, EntityName, Sql);
 
             Assert.IsNotNull(_service.Table);
 
-            Assert.AreEqual(entityName, _service.Table.Name);
+            Assert.AreEqual(EntityName, _service.Table.Name);
 
             Assert.IsTrue(_service.Table.Fields.Any());
 
@@ -108,17 +102,13 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestCreateNewEntity()
         {
             // Assert
-            const string sql = "SELECT * FROM \"Customer\";";
-
-            const string entityName = "Customer";
-
             Assert.IsNull(_service.Table);
 
-            _service.GetMetaData(_conn, entityName, sql);
+            _service.GetMetaData(_conn, EntityName, Sql);
 
             Assert.IsNotNull(_service.Table);
 
-            Assert.AreEqual(entityName, _service.Table.Name);
+            Assert.AreEqual(EntityName, _service.Table.Name);
 
             Assert.IsTrue(_service.Table.Fields.Any());
 
@@ -136,17 +126,13 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestCreateMappingFromDbToEntityForDataReader()
         {
             // Assert
-            const string sql = "SELECT * FROM \"Customer\";";
-
-            const string entityName = "Customer";
-
             Assert.IsNull(_service.Table);
 
-            _service.GetMetaData(_conn, entityName, sql);
+            _service.GetMetaData(_conn, EntityName, Sql);
 
             Assert.IsNotNull(_service.Table);
 
-            Assert.AreEqual(entityName, _service.Table.Name);
+            Assert.AreEqual(EntityName, _service.Table.Name);
 
             Assert.IsTrue(_service.Table.Fields.Any());
 
@@ -163,17 +149,13 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestCreateNewEntityCommand()
         {
             // Assert
-            const string sql = "SELECT * FROM \"Customer\";";
-
-            const string entityName = "Customer";
-
             Assert.IsNull(_service.Table);
 
-            _service.GetMetaData(_conn, entityName, sql);
+            _service.GetMetaData(_conn, EntityName, Sql);
 
             Assert.IsNotNull(_service.Table);
 
-            Assert.AreEqual(entityName, _service.Table.Name);
+            Assert.AreEqual(EntityName, _service.Table.Name);
 
             Assert.IsTrue(_service.Table.Fields.Any());
 
@@ -191,19 +173,13 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestCreateUpdateEntityCommand()
         {
             // Assert
-            const string sql = "SELECT * FROM \"Customer\";";
-
-            const string entityName = "Customer";
-
-            const string primaryKeyField = "CustomerId";
-
             Assert.IsNull(_service.Table);
 
-            _service.GetMetaData(_conn, entityName, sql, primaryKeyField);
+            _service.GetMetaData(_conn, EntityName, Sql, PrimaryKeyField);
 
             Assert.IsNotNull(_service.Table);
 
-            Assert.AreEqual(entityName, _service.Table.Name);
+            Assert.AreEqual(EntityName, _service.Table.Name);
 
             Assert.IsTrue(_service.Table.Fields.Any());
 
@@ -216,25 +192,40 @@ namespace Bodoconsult.Core.Database.Postgres.Test
             Debug.Print(result);
         }
 
+        [Test]
+        public void TestCreateDeleteEntityCommand()
+        {
+            // Assert
+            Assert.IsNull(_service.Table);
 
+            _service.GetMetaData(_conn, EntityName, Sql, PrimaryKeyField);
+
+            Assert.IsNotNull(_service.Table);
+
+            Assert.AreEqual(EntityName, _service.Table.Name);
+
+            Assert.IsTrue(_service.Table.Fields.Any());
+
+            // Act
+            var result = _service.CreateDeleteEntityCommand();
+
+            // Assert
+            Assert.IsFalse(string.IsNullOrEmpty(result));
+
+            Debug.Print(result);
+        }
 
         [Test]
         public void TestCreateEntityServiceClass()
         {
             // Assert
-            const string sql = "SELECT * FROM \"Customer\";";
-
-            const string entityName = "Customer";
-
-            const string primaryKeyField = "CustomerId";
-
             Assert.IsNull(_service.Table);
 
-            _service.GetMetaData(_conn, entityName, sql, primaryKeyField);
+            _service.GetMetaData(_conn, EntityName, Sql, PrimaryKeyField);
 
             Assert.IsNotNull(_service.Table);
 
-            Assert.AreEqual(entityName, _service.Table.Name);
+            Assert.AreEqual(EntityName, _service.Table.Name);
 
             Assert.IsTrue(_service.Table.Fields.Any());
 
@@ -251,17 +242,13 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestCreateGetAllEntitiesCommand()
         {
             // Assert
-            const string sql = "SELECT * FROM \"Customer\";";
-
-            const string entityName = "Customer";
-
             Assert.IsNull(_service.Table);
 
-            _service.GetMetaData(_conn, entityName, sql);
+            _service.GetMetaData(_conn, EntityName, Sql);
 
             Assert.IsNotNull(_service.Table);
 
-            Assert.AreEqual(entityName, _service.Table.Name);
+            Assert.AreEqual(EntityName, _service.Table.Name);
 
             Assert.IsTrue(_service.Table.Fields.Any());
 
@@ -278,17 +265,13 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestCreateCountCommand()
         {
             // Assert
-            const string sql = "SELECT * FROM \"Customer\";";
-
-            const string entityName = "Customer";
-
             Assert.IsNull(_service.Table);
 
-            _service.GetMetaData(_conn, entityName, sql);
+            _service.GetMetaData(_conn, EntityName, Sql);
 
             Assert.IsNotNull(_service.Table);
 
-            Assert.AreEqual(entityName, _service.Table.Name);
+            Assert.AreEqual(EntityName, _service.Table.Name);
 
             Assert.IsTrue(_service.Table.Fields.Any());
 
@@ -305,20 +288,13 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestCreateGetByIdCommand()
         {
             // Assert
-            const string sql = "SELECT * FROM \"Customer\";";
-
-            const string entityName = "Customer";
-
-            const string primaryKeyField = "CustomerId";
-
-
             Assert.IsNull(_service.Table);
 
-            _service.GetMetaData(_conn, entityName, sql, primaryKeyField);
+            _service.GetMetaData(_conn, EntityName, Sql, PrimaryKeyField);
 
             Assert.IsNotNull(_service.Table);
 
-            Assert.AreEqual(entityName, _service.Table.Name);
+            Assert.AreEqual(EntityName, _service.Table.Name);
 
             Assert.IsTrue(_service.Table.Fields.Any());
 
@@ -335,27 +311,18 @@ namespace Bodoconsult.Core.Database.Postgres.Test
         public void TestExport()
         {
             // Assert
-            const string sql = "SELECT * FROM \"Customer\";";
-
-            const string entityName = "Customer";
-
-            const string primaryKeyField = "CustomerId";
-
-            const string targetPath = @"D:\temp";
-
-
             Assert.IsNull(_service.Table);
 
-            _service.GetMetaData(_conn, entityName, sql, primaryKeyField);
+            _service.GetMetaData(_conn, EntityName, Sql, PrimaryKeyField);
 
             Assert.IsNotNull(_service.Table);
 
-            Assert.AreEqual(entityName, _service.Table.Name);
+            Assert.AreEqual(EntityName, _service.Table.Name);
 
             Assert.IsTrue(_service.Table.Fields.Any());
 
             // Act
-            var result = _service.ExportAll(targetPath);
+            var result = _service.ExportAll(TargetPath);
 
             // Assert
             Assert.IsTrue(result.Any());

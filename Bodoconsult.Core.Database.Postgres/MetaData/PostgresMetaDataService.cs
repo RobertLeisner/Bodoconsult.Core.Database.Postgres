@@ -1,9 +1,11 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using Bodoconsult.Core.Database.MetaData;
 using Bodoconsult.Core.Database.MetaData.Model;
 using Npgsql;
+using NpgsqlTypes;
 
 namespace Bodoconsult.Core.Database.Postgres.MetaData
 {
@@ -13,13 +15,13 @@ namespace Bodoconsult.Core.Database.Postgres.MetaData
     public class PostgresMetaDataService : BaseMetaDataService
     {
 
-        ///// <summary>
-        ///// Default ctor
-        ///// </summary>
-        //public PostgresMetaDataService()
-        //{
-        //    ConnManagerName = "PostgresConnManager";
-        //}
+        /// <summary>
+        /// Default ctor
+        /// </summary>
+        public PostgresMetaDataService()
+        {
+            ConnManagerName = "PostgresConnManager";
+        }
 
 
         /// <summary>
@@ -218,7 +220,7 @@ namespace Bodoconsult.Core.Database.Postgres.MetaData
                     result = $"dto.{fieldName}=reader.GetInt32({index});";
                     break;
                 case "int64":
-                    result = $"dto.{fieldName}=reader.GetInt64([{index});";
+                    result = $"dto.{fieldName}=reader.GetInt64({index});";
                     break;
                 case "uint16":
                     result = $"dto.{fieldName}=reader.GetUInt16({index});";
@@ -283,6 +285,66 @@ namespace Bodoconsult.Core.Database.Postgres.MetaData
 
             return result;
 
+
+        }
+
+        private static string GetFieldTypeFromType(Type type)
+        {
+            var result = "";
+
+            switch (type.Name.ToLowerInvariant())
+            {
+                case "byte":
+                    result = "NpgsqlDbType.Bit";
+                    break;
+                case "int16":
+                    result = "NpgsqlDbType.SmallInt";
+                    break;
+                case "short":
+                case "int32":
+                    result = "NpgsqlDbType.Integer";
+                    break;
+                case "long":
+                case "int64":
+                    result = "NpgsqlDbType.BigInt";
+                    break;
+                case "uint16":
+                    result = "NpgsqlDbType.SmallInt";
+                    break;
+                case "uint32":
+                    result = "NpgsqlDbType.Integer";
+                    break;
+                case "uint64":
+                    result = "NpgsqlDbType.BigInt";
+                    break;
+                case "single":
+                    result = "NpgsqlDbType.Real";
+                    break;
+                case "float":
+                case "double":
+                    result = "NpgsqlDbType.Real";
+                    break;
+                case "currency":
+                    result = "NpgsqlDbType.Money";
+                    break;
+                case "decimal":
+                    result = "NpgsqlDbType.Numeric";
+                    break;
+                case "bool":
+                case "boolean":
+                    result = "NpgsqlDbType.Bit";
+                    break;
+                case "datetime":
+                    result = "NpgsqlDbType.Date";
+                    break;
+                case "string":
+                    result = "NpgsqlDbType.Varchar";
+                    break;
+                default:
+                    break;
+            }
+
+            return result;
         }
 
 
@@ -291,7 +353,7 @@ namespace Bodoconsult.Core.Database.Postgres.MetaData
             var erg = new StringBuilder();
 
             erg.AppendLine($"// Parameter @{field.Name}");
-            erg.AppendLine($"p = new NpgsqlParameter(\"@{field.Name}\", \"{field.SourceDataType}\") {{ Value = item.{field.Name} }};");
+            erg.AppendLine($"p = new NpgsqlParameter(\"@{field.Name}\", {GetFieldTypeFromType(field.DatabaseType)}) {{ Value = item.{field.Name} }};");
             erg.AppendLine($"cmd.Parameters.Add(p); ");
             erg.AppendLine("");
 
@@ -418,6 +480,7 @@ namespace Bodoconsult.Core.Database.Postgres.MetaData
 
             foreach (var field in Table.Fields)
             {
+                if (field.IsPrimaryKey) continue;
                 fieldData += $"\\\"{field.Name}\\\"=@{field.Name}, ";
             }
 
@@ -435,23 +498,6 @@ namespace Bodoconsult.Core.Database.Postgres.MetaData
                 result.Append(" \";\r\n");
             }
 
-
-
-
-            //result.Append($"\t\t\"VALUES (");
-
-
-            //// Parameter list
-            //fieldData = "";
-
-            //foreach (var field in table.Fields)
-            //{
-            //    fieldData += "@" + field.Name + ", ";
-            //}
-
-            //result.Append(fieldData.Substring(0, fieldData.Length - 2));
-            //result.Append(")\";\r\n");
-
             result.AppendLine("");
             result.AppendLine("var cmd = new NpgsqlCommand(sql);");
             result.AppendLine("");
@@ -464,7 +510,6 @@ namespace Bodoconsult.Core.Database.Postgres.MetaData
             foreach (var field in Table.Fields)
             {
                 result.Append(GetFieldParameter(field));
-
             }
 
             result.AppendLine("_db.Exec(cmd);");
@@ -475,6 +520,39 @@ namespace Bodoconsult.Core.Database.Postgres.MetaData
             return result.ToString();
         }
 
+        /// <summary>
+        /// Creates a method to delete an entity from the database by its ID
+        /// </summary>
+        /// <returns>string with the method code</returns>
+        public override string CreateDeleteEntityCommand()
+        {
+            var result = new StringBuilder();
+
+            var pk = Table.Fields.FirstOrDefault(x => x.IsPrimaryKey);
+            if (pk == null)
+            {
+                result.AppendLine("// No primary key field defined for method GetById");
+                return result.ToString();
+            }
+
+            var paraName = pk.Name.Substring(0, 1).ToLowerInvariant() + pk.Name.Substring(1);
+
+            result.AppendLine($"/// <summary>\r\n/// Delete a row from table {Table.Name} \r\n/// </summary>");
+            result.AppendLine($"public void Delete({pk.DatabaseType} {paraName})");
+            result.AppendLine("{");
+            result.AppendLine($"");
+            result.AppendLine($"\tvar cmd = new NpgsqlCommand(\"DELETE FROM \\\"{Table.Name}\\\" WHERE \\\"{pk.Name}\\\" = @PK\");");
+            result.AppendLine($"");
+            result.AppendLine($"\tvar p = new NpgsqlParameter(\"@PK\", {GetFieldTypeFromType(pk.DatabaseType)}) {{Value = {paraName}}};");
+            result.AppendLine($"\tcmd.Parameters.Add(p);");
+            result.AppendLine($"");
+            result.AppendLine($"\t_db.Exec(cmd);");
+            result.AppendLine($"");
+            result.AppendLine("}");
+
+
+            return result.ToString();
+        }
 
         ///// <summary>
         ///// Creates a service class for the entity

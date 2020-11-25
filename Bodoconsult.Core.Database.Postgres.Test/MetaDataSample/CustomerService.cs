@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Npgsql;
+using NpgsqlTypes;
 
 namespace Bodoconsult.Core.Database.Postgres.Test.MetaDataSample
 {
@@ -28,55 +29,55 @@ namespace Bodoconsult.Core.Database.Postgres.Test.MetaDataSample
 			NpgsqlParameter p;
 
 			// Parameter @CustomerId
-			p = new NpgsqlParameter("@CustomerId", "System.Int32") { Value = item.CustomerId };
+			p = new NpgsqlParameter("@CustomerId", NpgsqlDbType.Integer) { Value = item.CustomerId };
 			cmd.Parameters.Add(p);
 
 			// Parameter @FirstName
-			p = new NpgsqlParameter("@FirstName", "System.String") { Value = item.FirstName };
+			p = new NpgsqlParameter("@FirstName", NpgsqlDbType.Varchar) { Value = item.FirstName };
 			cmd.Parameters.Add(p);
 
 			// Parameter @LastName
-			p = new NpgsqlParameter("@LastName", "System.String") { Value = item.LastName };
+			p = new NpgsqlParameter("@LastName", NpgsqlDbType.Varchar) { Value = item.LastName };
 			cmd.Parameters.Add(p);
 
 			// Parameter @Company
-			p = new NpgsqlParameter("@Company", "System.String") { Value = item.Company };
+			p = new NpgsqlParameter("@Company", NpgsqlDbType.Varchar) { Value = item.Company };
 			cmd.Parameters.Add(p);
 
 			// Parameter @Address
-			p = new NpgsqlParameter("@Address", "System.String") { Value = item.Address };
+			p = new NpgsqlParameter("@Address", NpgsqlDbType.Varchar) { Value = item.Address };
 			cmd.Parameters.Add(p);
 
 			// Parameter @City
-			p = new NpgsqlParameter("@City", "System.String") { Value = item.City };
+			p = new NpgsqlParameter("@City", NpgsqlDbType.Varchar) { Value = item.City };
 			cmd.Parameters.Add(p);
 
 			// Parameter @State
-			p = new NpgsqlParameter("@State", "System.String") { Value = item.State };
+			p = new NpgsqlParameter("@State", NpgsqlDbType.Varchar) { Value = item.State };
 			cmd.Parameters.Add(p);
 
 			// Parameter @Country
-			p = new NpgsqlParameter("@Country", "System.String") { Value = item.Country };
+			p = new NpgsqlParameter("@Country", NpgsqlDbType.Varchar) { Value = item.Country };
 			cmd.Parameters.Add(p);
 
 			// Parameter @PostalCode
-			p = new NpgsqlParameter("@PostalCode", "System.String") { Value = item.PostalCode };
+			p = new NpgsqlParameter("@PostalCode", NpgsqlDbType.Varchar) { Value = item.PostalCode };
 			cmd.Parameters.Add(p);
 
 			// Parameter @Phone
-			p = new NpgsqlParameter("@Phone", "System.String") { Value = item.Phone };
+			p = new NpgsqlParameter("@Phone", NpgsqlDbType.Varchar) { Value = item.Phone };
 			cmd.Parameters.Add(p);
 
 			// Parameter @Fax
-			p = new NpgsqlParameter("@Fax", "System.String") { Value = item.Fax };
+			p = new NpgsqlParameter("@Fax", NpgsqlDbType.Varchar) { Value = item.Fax };
 			cmd.Parameters.Add(p);
 
 			// Parameter @Email
-			p = new NpgsqlParameter("@Email", "System.String") { Value = item.Email };
+			p = new NpgsqlParameter("@Email", NpgsqlDbType.Varchar) { Value = item.Email };
 			cmd.Parameters.Add(p);
 
 			// Parameter @SupportRepId
-			p = new NpgsqlParameter("@SupportRepId", "System.Int32") { Value = item.SupportRepId };
+			p = new NpgsqlParameter("@SupportRepId", NpgsqlDbType.Integer) { Value = item.SupportRepId };
 			cmd.Parameters.Add(p);
 
 			_db.Exec(cmd);
@@ -89,62 +90,77 @@ namespace Bodoconsult.Core.Database.Postgres.Test.MetaDataSample
 		public void Update(Customer item)
 		{
 
-			const string sql = "UPDATE \"Customer\" SET \"CustomerId\"=@CustomerId, \"FirstName\"=@FirstName, \"LastName\"=@LastName, \"Company\"=@Company, \"Address\"=@Address, \"City\"=@City, \"State\"=@State, \"Country\"=@Country, \"PostalCode\"=@PostalCode, \"Phone\"=@Phone, \"Fax\"=@Fax, \"Email\"=@Email, \"SupportRepId\"=@SupportRepId WHERE \"CustomerId\"=@CustomerId; ";
+			const string sql = "UPDATE \"Customer\" SET \"FirstName\"=@FirstName, \"LastName\"=@LastName, \"Company\"=@Company, \"Address\"=@Address, \"City\"=@City, \"State\"=@State, \"Country\"=@Country, \"PostalCode\"=@PostalCode, \"Phone\"=@Phone, \"Fax\"=@Fax, \"Email\"=@Email, \"SupportRepId\"=@SupportRepId WHERE \"CustomerId\"=@CustomerId; ";
 
 			var cmd = new NpgsqlCommand(sql);
 
 			NpgsqlParameter p;
 
 			// Parameter @CustomerId
-			p = new NpgsqlParameter("@CustomerId", "System.Int32") { Value = item.CustomerId };
+			p = new NpgsqlParameter("@CustomerId", NpgsqlDbType.Integer) { Value = item.CustomerId };
 			cmd.Parameters.Add(p);
 
 			// Parameter @FirstName
-			p = new NpgsqlParameter("@FirstName", "System.String") { Value = item.FirstName };
+			p = new NpgsqlParameter("@FirstName", NpgsqlDbType.Varchar) { Value = item.FirstName };
 			cmd.Parameters.Add(p);
 
 			// Parameter @LastName
-			p = new NpgsqlParameter("@LastName", "System.String") { Value = item.LastName };
+			p = new NpgsqlParameter("@LastName", NpgsqlDbType.Varchar) { Value = item.LastName };
 			cmd.Parameters.Add(p);
 
 			// Parameter @Company
-			p = new NpgsqlParameter("@Company", "System.String") { Value = item.Company };
+			p = new NpgsqlParameter("@Company", NpgsqlDbType.Varchar) { Value = item.Company };
 			cmd.Parameters.Add(p);
 
 			// Parameter @Address
-			p = new NpgsqlParameter("@Address", "System.String") { Value = item.Address };
+			p = new NpgsqlParameter("@Address", NpgsqlDbType.Varchar) { Value = item.Address };
 			cmd.Parameters.Add(p);
 
 			// Parameter @City
-			p = new NpgsqlParameter("@City", "System.String") { Value = item.City };
+			p = new NpgsqlParameter("@City", NpgsqlDbType.Varchar) { Value = item.City };
 			cmd.Parameters.Add(p);
 
 			// Parameter @State
-			p = new NpgsqlParameter("@State", "System.String") { Value = item.State };
+			p = new NpgsqlParameter("@State", NpgsqlDbType.Varchar) { Value = item.State };
 			cmd.Parameters.Add(p);
 
 			// Parameter @Country
-			p = new NpgsqlParameter("@Country", "System.String") { Value = item.Country };
+			p = new NpgsqlParameter("@Country", NpgsqlDbType.Varchar) { Value = item.Country };
 			cmd.Parameters.Add(p);
 
 			// Parameter @PostalCode
-			p = new NpgsqlParameter("@PostalCode", "System.String") { Value = item.PostalCode };
+			p = new NpgsqlParameter("@PostalCode", NpgsqlDbType.Varchar) { Value = item.PostalCode };
 			cmd.Parameters.Add(p);
 
 			// Parameter @Phone
-			p = new NpgsqlParameter("@Phone", "System.String") { Value = item.Phone };
+			p = new NpgsqlParameter("@Phone", NpgsqlDbType.Varchar) { Value = item.Phone };
 			cmd.Parameters.Add(p);
 
 			// Parameter @Fax
-			p = new NpgsqlParameter("@Fax", "System.String") { Value = item.Fax };
+			p = new NpgsqlParameter("@Fax", NpgsqlDbType.Varchar) { Value = item.Fax };
 			cmd.Parameters.Add(p);
 
 			// Parameter @Email
-			p = new NpgsqlParameter("@Email", "System.String") { Value = item.Email };
+			p = new NpgsqlParameter("@Email", NpgsqlDbType.Varchar) { Value = item.Email };
 			cmd.Parameters.Add(p);
 
 			// Parameter @SupportRepId
-			p = new NpgsqlParameter("@SupportRepId", "System.Int32") { Value = item.SupportRepId };
+			p = new NpgsqlParameter("@SupportRepId", NpgsqlDbType.Integer) { Value = item.SupportRepId };
+			cmd.Parameters.Add(p);
+
+			_db.Exec(cmd);
+
+		}
+
+		/// <summary>
+		/// Delete a row from table Customer 
+		/// </summary>
+		public void Delete(System.Int32 customerId)
+		{
+
+			var cmd = new NpgsqlCommand("DELETE FROM \"Customer\" WHERE \"CustomerId\" = @PK");
+
+			var p = new NpgsqlParameter("@PK", NpgsqlDbType.Integer) { Value = customerId };
 			cmd.Parameters.Add(p);
 
 			_db.Exec(cmd);
