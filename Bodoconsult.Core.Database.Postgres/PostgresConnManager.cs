@@ -104,10 +104,15 @@ namespace Bodoconsult.Core.Database.Postgres
             conn.Open();
             var cmd = new NpgsqlCommand(sql, conn);
             if (_commandTimeOut != -1)
+            {
                 cmd.CommandTimeout = _commandTimeOut;
+            }
             var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
-            if (reader == null) return null;
+            //if (reader == null)
+            //{
+            //    return null;
+            //}
 
             var dt = new DataTable();
             dt.Load(reader);
@@ -129,10 +134,15 @@ namespace Bodoconsult.Core.Database.Postgres
 
             cmd.Connection = conn;
             if (_commandTimeOut != -1)
+            {
                 cmd.CommandTimeout = _commandTimeOut;
+            }
             var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
-            if (reader == null) return null;
+            if (reader == null)
+            {
+                return null;
+            }
 
             var dt = new DataTable();
             dt.Load(reader);
@@ -153,7 +163,9 @@ namespace Bodoconsult.Core.Database.Postgres
             {
                 var cmd = new NpgsqlCommand(sql, conn);
                 if (_commandTimeOut != -1)
+                {
                     cmd.CommandTimeout = _commandTimeOut;
+                }
                 cmd.Connection.Open();
                 var reader = cmd.ExecuteReader();
                 if (reader.HasRows)
@@ -184,7 +196,9 @@ namespace Bodoconsult.Core.Database.Postgres
             {
                 var cmd = new NpgsqlCommand(sql, conn);
                 if (_commandTimeOut != -1)
+                {
                     cmd.CommandTimeout = _commandTimeOut;
+                }
                 cmd.Connection.Open();
                 cmd.ExecuteNonQuery();
                 conn.Close();
@@ -202,7 +216,9 @@ namespace Bodoconsult.Core.Database.Postgres
             {
                 var cmd = new NpgsqlCommand(sql, conn);
                 if (_commandTimeOut != -1)
+                {
                     cmd.CommandTimeout = _commandTimeOut;
+                }
                 cmd.Connection.Open();
                 object value = cmd.ExecuteScalar();
                 conn.Close();
@@ -227,7 +243,9 @@ namespace Bodoconsult.Core.Database.Postgres
                     //if (SendStatus != null) conn.InfoMessage += ConnOnInfoMessage;
                     cmd.Connection = conn;
                     if (_commandTimeOut != -1)
+                    {
                         cmd.CommandTimeout = _commandTimeOut;
+                    }
                     cmd.Connection.Open();
                     var value = cmd.ExecuteScalar();
                     conn.Close();
@@ -253,7 +271,9 @@ namespace Bodoconsult.Core.Database.Postgres
             {
                 cmd.Connection = conn;
                 if (_commandTimeOut != -1)
+                {
                     cmd.CommandTimeout = _commandTimeOut;
+                }
                 cmd.Connection.Open();
                 cmd.ExecuteNonQuery();
                 conn.Close();
@@ -277,10 +297,18 @@ namespace Bodoconsult.Core.Database.Postgres
 
                     for (index = 0; index < commands.Count; index++)
                     {
+
+                        if (index % NotifyProgressSteps == 0)
+                        {
+                            NotifyProgress?.Invoke(index);
+                        }
+
                         var cmd = commands[index];
                         cmd.Connection = conn;
                         if (_commandTimeOut != -1)
+                        {
                             cmd.CommandTimeout = _commandTimeOut;
+                        }
                         cmd.ExecuteNonQuery();
                     }
 
@@ -307,7 +335,9 @@ namespace Bodoconsult.Core.Database.Postgres
             conn.Open();
             var cmd = new NpgsqlCommand(sql, conn);
             if (_commandTimeOut != -1)
+            {
                 cmd.CommandTimeout = _commandTimeOut;
+            }
             var dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
             return dr;
         }
@@ -326,7 +356,9 @@ namespace Bodoconsult.Core.Database.Postgres
             cmd.Connection = conn;
 
             if (_commandTimeOut != -1)
+            {
                 cmd.CommandTimeout = _commandTimeOut;
+            }
             var dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
             return dr;
         }
@@ -427,10 +459,6 @@ namespace Bodoconsult.Core.Database.Postgres
                 default:
                     throw new ArgumentOutOfRangeException(nameof(dataType), dataType, null);
             }
-
-
-
-            throw new ArgumentException($"Type not implemented: {dataType}");
         }
     }
 }

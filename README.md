@@ -44,6 +44,8 @@ The most important class in the library is the the class PostgresConnManager. Po
 
 ### Samples
 
+``` csharp
+
         [SetUp]
         public void Setup()
         {
@@ -301,6 +303,8 @@ The most important class in the library is the the class PostgresConnManager. Po
             Assert.IsTrue(result == 0);
         }
 
+```
+
 ## Developer tools for making best usage of Bodoconsult.Core.Database.Postgres based data layers
 
 There is as basic metadata infrastructure implemented to help developers to make best usage of Bodoconsult.Core.Database. This metadata infrastructure derived from 
@@ -314,6 +318,7 @@ The other methods ma be removed in that case.
 
 Here a sample how to use the IMetaDataService infrastructure:
 
+``` csharp
 
 			const string conn = "Valid ADO.NET provider connection string";
 
@@ -334,6 +339,7 @@ Here a sample how to use the IMetaDataService infrastructure:
             // Export the code files
             var result = service.ExportAll(targetPath);
 
+```
 
 As a result you will find four files with code in the folder D:\temp:
 

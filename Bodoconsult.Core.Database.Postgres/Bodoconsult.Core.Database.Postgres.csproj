@@ -7,16 +7,16 @@
     <RepositoryUrl>https://github.com/RobertLeisner/Bodoconsult.Core.Database.Postgres</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageId>Bodoconsult.Core.Database.Postgres</PackageId>
-    <Version>1.0.6</Version>
+    <Version>1.0.7</Version>
     <Authors>Robert Leisner</Authors>
     <Company>Bodoconsult EDV-Dienstleistungen GmbH</Company>
     <RepositoryType>git</RepositoryType>
     <PackageTags>System.Data PostgreSql Datatable SQL exec</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>Simple .NET database layer for PostgreSQL based on System.Data intended for mainly read-only data access i.e. for reporting purposes</Description>
-    <PackageReleaseNotes>Enahnceing metadat infrastructure and bugfixingha.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added NotiyProgressHandler and minor bugfixing.</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/RobertLeisner/Bodoconsult.Core.Database.Postgres</PackageProjectUrl>
-
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,8 +39,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bodoconsult.Core.Database" Version="1.0.7" />
-    <PackageReference Include="Npgsql" Version="5.0.0" />
+    <PackageReference Include="Bodoconsult.Core.Database" Version="1.0.9" />
+    <PackageReference Include="Npgsql" Version="5.0.5" />
   </ItemGroup>
 
 </Project>
